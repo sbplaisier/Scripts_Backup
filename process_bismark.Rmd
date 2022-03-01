@@ -1,0 +1,94 @@
+---
+title: "metylation_methylKit"
+author: "Seema Plaisier"
+date: "2/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries
+
+
+```{r Libraries}
+
+library(methylKit)
+library(dplyr)
+
+```
+
+
+```{r LoadData}
+setwd("~/PlacentaScratch/methylation")
+infile1 = file.path("C:","Users","splaisie","Documents","PlacentaScratch","methylation","OBG0055_Placenta_Merge_trimmed_R1_bismark_bt2_pe.deduplicated.bismark.cov.gz")
+infile2 = file.path("C:","Users","splaisie","Documents","PlacentaScratch","methylation","OBG0055_Decidua_Merge_trimmed_R1_bismark_bt2_pe.deduplicated.bismark.cov.gz")
+infile3 = file.path("C:","Users","splaisie","Documents","PlacentaScratch","methylation","OBG0083_Placenta_Merge_trimmed_R1_bismark_bt2_pe.deduplicated.bismark.cov.gz")
+infile4 = file.path("C:","Users","splaisie","Documents","PlacentaScratch","methylation","OBG0083_Decidua_Merge_trimmed_R1_bismark_bt2_pe.deduplicated.bismark.cov.gz")
+infile5 = file.path("C:","Users","splaisie","Documents","PlacentaScratch","methylation","OBG0088_Placenta_Merge_trimmed_R1_bismark_bt2_pe.deduplicated.bismark.cov.gz")
+infile6 = file.path("C:","Users","splaisie","Documents","PlacentaScratch","methylation","OBG0088_Decidua_Merge_trimmed_R1_bismark_bt2_pe.deduplicated.bismark.cov.gz")
+infile7 = file.path("C:","Users","splaisie","Documents","PlacentaScratch","methylation","OBG0095_Placenta_Sample1_trimmed_R1_bismark_bt2_pe.deduplicated.bismark.cov.gz")
+
+# all XX pairs: XX placentas with matching decidua
+#file.list = list(infile1,infile2,infile3,infile4,infile5,infile6)
+#name.list = list("OBG0055_Placenta","OBG0055_Decidua","OBG0083_Placenta","OBG0083_Decidua","OBG0088_Placenta","OBG0088_Decidua")
+#treatment.list = c(0,1,0,1,0,1)
+
+# all XX placentas: 
+file.list = list(infile1,infile3,infile5,infile7)
+name.list = list("OBG0055_Placenta","OBG0083_Placenta","OBG0088_Placenta","OBG0095_Placenta")
+treatment.list = c(0,0,0,0)
+
+bslist = methRead(file.list, sample.id = name.list, treatment = treatment.list, context = "CpG", mincov = 5, assembly = "hg38", pipeline = "bismarkCoverage")
+
+meth = unite(bslist, destrand = FALSE)
+
+meth_chrX = meth[meth$chr=="chrX"]
+meth_chr8 = meth[meth$chr=="chr8"]
+
+write.csv(meth_chr8,file = "meth_XXplacenta_chr8_summary.csv")
+write.csv(meth_chrX,file = "meth_XXplacenta_chrX_summary.csv")
+
+
+```
+
+## Processing
+
+```{r Processing}
+
+# plot histogram of %CpG Methylation
+getMethylationStats(bslist[[2]], plot = TRUE, both.strands = FALSE)
+
+# plot histogram of CpG Coverage
+getCoverageStats(bslist[[2]], plot = TRUE, both.strands = FALSE)
+
+# correlate samples
+getCorrelation(meth_chrX,plot=TRUE)
+
+# cluster samples
+gc()
+clusterSamples(meth_chrX, dist="correlation", method="ward", plot=TRUE)
+
+# PCA of samples
+PCASamples(meth)
+
+# not tested yet, seems to take a long time
+# myDiff=calculateDiffMeth(meth)
+# myDiff=calculateDiffMeth(meth,mc.cores = 2)
+
+
+```
+
+
+## Differential methylation
+
+```{r Diff}
+
+```
+
+## Session info
+
+```{r info}
+sessionInfo()
+```

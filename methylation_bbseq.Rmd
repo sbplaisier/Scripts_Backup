@@ -1,0 +1,58 @@
+---
+title: "Methylation"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries
+
+
+```{r Libraries}
+
+library(bsseq)
+
+```
+
+
+```{r LoadData}
+setwd("~/PlacentaScratch/methylation")
+infile = file.path("C:","Users","splaisie","Documents","PlacentaScratch","methylation","OBG0055_Decidua_Merge_trimmed_R1_bismark_bt2_pe.deduplicated.bismark.cov.gz")
+bsseq = read.bismark(files = infile, colData = DataFrame(row.names = "OBG0055_Decidua"),rmZeroCov = FALSE, strandCollapse = FALSE, verbose = TRUE)
+bsdata_ChrX = chrSelectBSseq(bsseq,seqnames = "chrX", order = TRUE)
+
+infile2 = file.path("C:","Users","splaisie","Documents","PlacentaScratch","methylation","OBG0055_Placenta_Merge_trimmed_R1_bismark_bt2_pe.deduplicated.bismark.cov.gz")
+bsseq2 = read.bismark(files = infile, colData = DataFrame(row.names = "OBG0055_Decidua"),rmZeroCov = FALSE, strandCollapse = FALSE, verbose = TRUE)
+bsdata2_ChrX = chrSelectBSseq(bsseq2,seqnames = "chrX", order = TRUE)
+
+bsseq_all = read.bismark(files = list(infile,infile2), colData = DataFrame(row.names = list( "OBG0055_Decidua","OBG0055_Placenta")),rmZeroCov = FALSE, strandCollapse = FALSE, verbose = TRUE)
+
+#bsall = combineList(list(bsdata_ChrX,bsdata2_ChrX))
+
+```
+
+## Processing
+
+```{r Processing}
+head(getCoverage(bsdata_ChrX))
+bssmooth_ChrX = BSmooth(BSseq = bsdata_ChrX, verbose = TRUE)
+round(colMeans(getCoverage(bssmooth_ChrX)),1)
+length(bssmooth_ChrX)
+head(bssmooth_ChrX)
+
+```
+
+
+## Differential methylation
+
+```{r Diff}
+
+```
+
+## Session info
+
+```{r info}
+sessionInfo()
+```
