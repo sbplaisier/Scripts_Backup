@@ -13,11 +13,16 @@ import matplotlib.pyplot as plt
 # input parameters
 
 #ase_directory = "/data/CEM/wilsonlab/projects/placenta/2021_placenta_test/lesstrim/asereadcounter/analyze_ase_results/"
-ase_directory = "/data/CEM/wilsonlab/projects/placenta/2021_placenta_test/min_call_filter/01_process_dna/asereadcounter/analyze_ase_results/"
+#ase_directory = "/data/CEM/wilsonlab/projects/placenta/2021_placenta_test/min_call_filter/01_process_dna/asereadcounter/analyze_ase_results/"
+ase_directory = "/scratch/splaisie/placenta/valleywise/asereadcounter/analyze_ase_results/"
 autosome = "chr8"
 
 #samples = ["MW-11","MW-21","MW-31","OBG0055-P1"]   #exome file ids
-samples = ["MW-11","MW-21","MW-31","OBG0055-P1", "MW-53", "MW-43","MW-15","MW-33","OBG0055-D5"]   #exome file ids
+#samples = ["MW-11","MW-21","MW-31","OBG0055-P1", "MW-53", "MW-43","MW-15","MW-33","OBG0055-D5"]   #exome file ids
+samples =  ["Plac_CON02", "Plac_CON03","Plac_CON05","Plac_CON06","Plac_CON10","Plac_HDP01","Plac_HDP08","Plac_HDP09","Plac_HDP10"]
+
+filt_alt_count = True
+alt_count_min_threshold = 2
 
 # read allele balances 
 
@@ -42,10 +47,14 @@ for file in allele_balance_files_chrX:
     inputheaders = inputdata[0].replace('\n','').split('\t')
     allele_balance_index_chrX = inputheaders.index('allele_balance')
     position_index_chrX = inputheaders.index('position')
+    altcount_index_chrX = inputheaders.index('alt_count')
 
     for input in inputdata[1:len(inputdata)]:
         input = input.replace("\n","")
         items = input.split("\t")
+        if (filt_alt_count):
+            if (float(items[altcount_index_chrX]) < alt_count_min_threshold):
+                next
         allele_balance_data_chrX.append(float(items[allele_balance_index_chrX]))
         position_data_chrX.append(int(items[position_index_chrX])/1000000)
    
@@ -60,10 +69,14 @@ for file in allele_balance_files_chrX:
     inputheaders = inputdata[0].replace('\n','').split('\t')
     allele_balance_index_autosome = inputheaders.index('allele_balance')
     position_index_autosome = inputheaders.index('position')
+    altcount_index_autosome = inputheaders.index('alt_count')
 
     for input in inputdata[1:len(inputdata)]:
         input = input.replace("\n","")
         items = input.split("\t")
+        if (filt_alt_count):
+            if (float(items[altcount_index_autosome]) < alt_count_min_threshold):
+                next
         allele_balance_data_autosome.append(float(items[allele_balance_index_autosome]))
         position_data_autosome.append(int(items[position_index_autosome])/1000000)
    
@@ -90,5 +103,7 @@ for file in allele_balance_files_chrX:
     
     fig.tight_layout(pad=2.0)
     outputpng = ase_directory + "unphased_allele_balance_acrosschr_" + samplename + ".png"
+    if (filt_alt_count):
+        outputpng = outputpng.replace(".png","_filtaltcount_"+str(alt_count_min_threshold)+".png")
     plt.savefig(outputpng)
     print ("Created plot: ", outputpng)

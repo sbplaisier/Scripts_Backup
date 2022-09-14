@@ -1,0 +1,61 @@
+---
+title: "metylation_methylKit"
+author: "Seema Plaisier"
+date: "2/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Libraries
+
+
+```{r Libraries}
+library(biomaRt)
+library(GenomicFeatures)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+
+```
+
+
+```{r LoadData}
+genes <- genes(TxDb.Hsapiens.UCSC.hg38.knownGene)
+mart <- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
+bm <- getBM(attributes = c("external_gene_name",'entrezgene_id'), values=names(genes),filters ='entrezgene_id', mart = mart)
+names(genes) <- bm$external_gene_name[match(genes$gene_id,bm$entrezgene_id)]
+genes_chrX = genes[seqnames(genes) == "chrX"]
+
+prom = promoters(genes_chrX)['ARSD']
+r = ranges(prom)
+s = start(r)
+e = end(r)
+print(paste(s,e, sep = ","))
+
+inputfile = "C:/Users/splaisie/Documents/PlacentaScratch/troubleshooting/min_call_filter/filterPARs/OBG0055-P1_chrX_phased_allele_balance_data_annotated.gene_name.csv"
+
+input = read.csv(file=inputfile)
+outputfile = gsub(".csv",".promoters.csv",inputfile)
+
+sink(outputfile)
+for (g in input$gene_name) {
+  if (g %in% names(genes_chrX)) {
+    p = promoters(genes_chrX)[g]
+    s = start(p)
+    e = end(p)
+    print(paste(g,s,e, sep = ","))
+  } 
+  else {
+    print (paste0 ("not found: ",g))
+  }
+}
+sink()
+```
+
+
+## Session info
+
+```{r info}
+sessionInfo()
+```

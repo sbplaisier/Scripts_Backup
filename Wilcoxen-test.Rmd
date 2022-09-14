@@ -1,0 +1,86 @@
+---
+title: "Wilcoxen-test"
+author: "Seema Plaisier"
+date: "`r format(Sys.time(), '%m/%d/%y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+
+```
+
+### Libraries
+```{r}
+library(reshape2)
+library(ggplot2)
+```
+
+
+### session Info
+```{r, eval=TRUE}
+
+sessionInfo()
+
+```
+
+
+### Load data
+```{r}
+#genesTXT = "C:/Users/splaisie/Documents/PlacentaScratch/methylation/other_files/XCI_data_all_XX_placenta.txt"
+genesTXT = "C:/Users/splaisie/Documents/PlacentaScratch/methylation/other_files/decidua/XCI_data_decidua.txt"
+data = read.delim(genesTXT, sep = "\t", header = TRUE, row.names = 1, check.names = FALSE)
+df = as.data.frame(data)
+
+df_escape = df[df$XCI_status == "escape",]
+df_inactivated = df[df$XCI_status == "inactivated",]
+df_variable = df[df$XCI_status == "variable",]
+
+```
+
+### Wilcoxen rank sum test
+```{r Wilcoxen}
+outputfile = gsub(".txt",".wilcoxen.txt",genesTXT)
+sink(outputfile)
+for (i in 2:length(df)) {
+  print (colnames(df)[i])
+  print(wilcox.test(df_escape[,i],df_inactivated[,i],alternative = "two.sided"))
+}
+sink()
+
+```
+
+### Correlation Heatmap
+```{r CorrelationMap}
+
+#http://www.sthda.com/english/wiki/ggplot2-quick-correlation-matrix-heatmap-r-software-and-data-visualization
+
+cormat <- round(cor(df[,2:length(df)]),2)
+melted_cormat <- melt(cormat)
+ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) + 
+  geom_tile()
+
+get_lower_tri<-function(cormat){
+    cormat[upper.tri(cormat)] <- NA
+    return(cormat)
+}
+
+get_upper_tri <- function(cormat){
+  cormat[lower.tri(cormat)]<- NA
+  return(cormat)
+}
+
+upper_tri <- get_upper_tri(cormat)
+melted_cormat <- melt(upper_tri, na.rm = TRUE)
+ggheatmap = ggplot(data = melted_cormat, aes(Var2, Var1, fill = value))+ geom_tile(color = "white")+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, limit = c(-1,1), space = "Lab", name="Pearson\nCorrelation") + theme_minimal()+ theme(axis.text.x = element_text(angle = 45, vjust = 1, size = 12, hjust = 1))+ coord_fixed()
+
+ggheatmap = ggheatmap + geom_text(aes(Var2, Var1, label = value), color = "black", size = 4) + theme(axis.title.x = element_blank(),  axis.title.y = element_blank(), panel.grid.major = element_blank(),  panel.border = element_blank(), panel.background = element_blank(),  axis.ticks = element_blank(), legend.justification = c(1, 0),  legend.position = c(0.6, 0.7), legend.direction = "horizontal")+ guides(fill = guide_colorbar(barwidth = 7, barheight = 1, title.position = "top", title.hjust = 0.5))
+
+outputfile = gsub(".txt",".corrheatmap.pdf", genesTXT)
+ggsave(outputfile, plot = ggheatmap)
+
+```

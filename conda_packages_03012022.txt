@@ -1,0 +1,110 @@
+# packages in environment at /home/splaisie/mambaforge/envs/placenta_RNA_env3:
+#
+# Name                    Version                   Build  Channel
+_libgcc_mutex             0.1                        main  
+_openmp_mutex             4.5                       1_gnu  
+asn1crypto                1.4.0                      py_0  
+bamtools                  2.5.1                h9a82719_9    bioconda
+bbmap                     38.22                h14c3975_1    bioconda
+bcftools                  1.5                           3    bioconda
+bcrypt                    3.1.4            py35h14c3975_0  
+bedops                    2.4.39               h7d875b9_1    bioconda
+bedtools                  2.26.0                        0    bioconda
+bismark                   0.23.1               hdfd78af_0    bioconda
+blas                      1.0                         mkl  
+bowtie2                   2.3.4.3          py35h2d50403_0    bioconda
+brotlipy                  0.7.0            py35h470a237_0    conda-forge
+bwa                       0.7.17               h5bf99c6_8    bioconda
+bwameth                   0.2.2              pyh3252c3a_4    bioconda
+bz2file                   0.98                     py35_1  
+bzip2                     1.0.8                h7b6447c_0  
+ca-certificates           2022.2.1             h06a4308_0  
+certifi                   2020.6.20          pyhd3eb1b0_3  
+cffi                      1.11.5           py35he75722e_1  
+chardet                   3.0.4                    py35_1  
+click                     7.1.2              pyhd3eb1b0_0  
+cryptography              2.3.1            py35hc365091_0  
+curl                      7.61.0               h84994c4_0  
+cutadapt                  1.18                     py35_0    bioconda
+cycler                    0.10.0                   pypi_0    pypi
+docutils                  0.14             py35hd11081d_0  
+dropbox                   9.0.0                    py35_0  
+fastqc                    0.11.8                        2    bioconda
+filechunkio               1.6                      py35_0    bioconda
+font-ttf-dejavu-sans-mono 2.37                 hd3eb1b0_0  
+fontconfig                2.13.0                        1    conda-forge
+freetype                  2.8.1                hfa320df_1    conda-forge
+ftputil                   3.2                      py35_0    bioconda
+hisat2                    2.2.1                h1b792b2_3    bioconda
+icu                       58.2                 he6710b0_3  
+idna                      2.10               pyhd3eb1b0_0  
+intel-openmp              2022.0.1          h06a4308_3633  
+jemalloc                  5.2.1                h2531618_5  
+jinja2                    2.11.3             pyhd3eb1b0_0  
+kiwisolver                1.1.0                    pypi_0    pypi
+libboost                  1.65.1               habcd387_4  
+libcurl                   7.61.0               h1ad7b7a_0  
+libffi                    3.2.1             hf484d3e_1007  
+libgcc                    7.2.0                h69d50b8_2  
+libgcc-ng                 9.3.0               h5101ec6_17  
+libgfortran-ng            7.5.0               ha8ba4b0_17  
+libgfortran4              7.5.0               ha8ba4b0_17  
+libgomp                   9.3.0               h5101ec6_17  
+libiconv                  1.15                 h63c8f33_5  
+libpng                    1.6.34               hb9fc6fc_0  
+libsodium                 1.0.16               h1bed415_0  
+libssh2                   1.8.0                h9cfc8f7_4  
+libstdcxx-ng              9.3.0               hd4cf53a_17  
+libuuid                   1.0.3                h7f8727e_2  
+libxml2                   2.9.3                         6    conda-forge
+markupsafe                1.0              py35h14c3975_1  
+matplotlib                3.0.3                    pypi_0    pypi
+mkl                       2018.0.3                      1  
+mkl_fft                   1.0.6            py35h7dd41cf_0  
+mkl_random                1.0.1            py35h4414c95_1  
+multiqc                   0.4                      pypi_0    pypi
+ncurses                   5.9                          10    conda-forge
+numpy                     1.15.2           py35h1d66e8a_0  
+numpy-base                1.15.2           py35h81de0dd_0  
+openjdk                   8.0.152              h7b6447c_3  
+openssl                   1.0.2u               h7b6447c_0  
+pandas                    0.23.4           py35h04863e7_0  
+paramiko                  2.4.1                    py35_0  
+perl                      5.26.2               h14c3975_0    anaconda
+picard                    2.9.2                         2    bioconda
+pigz                      2.6                  h27cfd23_0  
+pip                       20.3.4                   pypi_0    pypi
+pyasn1                    0.4.8              pyhd3eb1b0_0  
+pycparser                 2.20                       py_2  
+pynacl                    1.2.1            py35h14c3975_0  
+pyopenssl                 18.0.0                   py35_0  
+pyparsing                 2.4.7                    pypi_0    pypi
+pysftp                    0.2.9              pyhd3eb1b0_1  
+pysocks                   1.6.8                    py35_0  
+python                    3.5.1                         1    conda-forge
+python-dateutil           2.8.2              pyhd3eb1b0_0  
+pytz                      2021.3             pyhd3eb1b0_0  
+pyyaml                    3.11                     py35_0    conda-forge
+readline                  6.2                           0    conda-forge
+requests                  2.25.1             pyhd3eb1b0_0  
+salmon                    0.12.0               h86b0361_1    bioconda
+samblaster                0.1.26               h7d875b9_1    bioconda
+samtools                  1.4.1                         0    bioconda
+setuptools                40.2.0                   py35_0  
+simplejson                3.16.0           py35h14c3975_0  
+six                       1.16.0             pyhd3eb1b0_1  
+snakemake                 3.11.0                   py35_1    bioconda
+sqlite                    3.9.2                         0    conda-forge
+subread                   1.5.2                         0    bioconda
+tabix                     0.2.6                ha92aebf_0    bioconda
+tbb                       2021.5.0             hd09550d_0  
+tbb4py                    2018.0.5         py35h6bb024c_0  
+tk                        8.5.19                        2    conda-forge
+toolshed                  0.4.6              pyh864c0ab_3    bioconda
+trim-galore               0.6.7                hdfd78af_0    bioconda
+urllib3                   1.26.8             pyhd3eb1b0_0  
+wrapt                     1.10.11          py35h14c3975_2  
+xopen                     0.7.3                      py_0    bioconda
+xz                        5.0.5                         1    conda-forge
+yaml                      0.2.5                h7b6447c_0  
+zlib                      1.2.11               h7f8727e_4  

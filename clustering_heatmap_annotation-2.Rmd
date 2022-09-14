@@ -1,0 +1,76 @@
+---
+title: "Clustering"
+author: "Seema Plaisier"
+date: "`r format(Sys.time(), '%m/%d/%y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+
+```
+
+### Libraries
+```{r}
+library(pheatmap)
+library(readxl)
+library(WriteXLS)
+
+```
+
+
+### session Info
+```{r, eval=TRUE}
+
+sessionInfo()
+
+```
+
+
+### Load data
+```{r}
+protsTXT = "Z:/01_Projects/063_0001_BeatCC_NB/03_TMTStudy/03_ANALYSIS/03F_GlobalRTS/CovariateRegression/prots_normalized_lt7zeros_EnTrResiduals-CCPspavg4-logscale-siganova.txt"
+
+data = read.delim(protsTXT, sep = "\t", header = TRUE, row.names = 1, check.names = FALSE)
+df = as.data.frame(data)
+df = na.exclude(df)
+
+load("Z:/01_Projects/063_0001_BeatCC_NB/03_TMTStudy/03_ANALYSIS/03E_Global/variables_ANCOVA_KGM_20200521.RData")
+
+
+```
+
+### Sample Annotations
+```{r}
+annotColors$CollectionSite <- c('Cardinal Glennon Children\'s Medical Center'='#88CCEE', 'Connecticut Children\'s Medical Center'='#332288', 'Helen DeVos Children\'s Hospital'='#882255', 'Dell Children\'s Medical Center'='#CC6677', 'MUSC'='#AA4499', 'RCHSD'='#661100', 'HDVCH 08'='#DDCC77', 'Penn State Hershey'='#44AA99', 'Children\'s Minnesota'='#6699CC', 'Levine Children\'s Hospital'='#117733','Norton Children\'s Hospital'='#999933', 'Children\'s of Alabama'='#888888','Arnold Palmer Hospital'='#000000','Arkansas Children\'s Hospital'='#00FF00','21.0' = '#FFFFFF')
+annotColors$EnTr <- c(Enrollment='#d6d5d2',Treatment='#706f6d')
+
+annotTXT = "Z:/01_Projects/063_0001_BeatCC_NB/03_TMTStudy/03_ANALYSIS/03F_GlobalRTS/CovariateRegression/patientinfo.txt"
+annotdata = read.delim(annotTXT, sep = "\t", header = TRUE, row.names = 1, check.names = FALSE)
+annotdf = as.data.frame(annotdata)
+
+annotColors$Kit = c(Kit1 = "gray90", Kit2 = "lightblue", Kit3 = "blue", Kit4 = "midnightblue")
+annotColors$Clusters = c(cluster1 = "#b3e2cd", cluster2 = "#fdcdac", cluster3 = "#cbd5e8", cluster4 = "#f4cae4")
+
+
+```
+
+### Clustering
+```{r}
+
+outfile = "Heatmap_Proteins_RTS_NAexclude_euclidean_siganovaCCPspearmanAvg4.pdf"
+#outfile = gsub(".txt","_heatmap.pdf", protsTXT)
+
+clustertree = pheatmap(mat = as.matrix(df), color = colorRampPalette(c("blue","white","red"))(100), border_color = NA, annotation_col = annotdf, annotation_colors = annotColors, scale = "row", clustering_distance_cols = "euclidean", fontsize = 5, show_rownames = FALSE, main = "", filename = outfile)
+#clustertree = pheatmap(mat = as.matrix(df), color = colorRampPalette(c("blue","white","red"))(100), border_color = NA, annotation_col = annotdf, annotation_colors = annotColors, scale = "row", clustering_distance_cols = "correlation", fontsize = 5, show_rownames = FALSE, main = "", filename = outfile, cluster_cols = FALSE)
+#clustertree = pheatmap(mat = as.matrix(df), color = colorRampPalette(c("blue","white","red"))(100), border_color = NA, annotation_col = annotdf, annotation_colors = annotColors, clustering_distance_cols = "euclidean", fontsize = 5, show_rownames = FALSE, main = "", filename = outfile)
+
+clustertable10 = data.frame(cutree(clustertree$tree_row,k=10))
+roworder = data.frame(clustertree$tree_row$order)
+
+WriteXLS("clustertable10", ExcelFileName = "Heatmap_GSVA_EnTrResiduals_correlation_PatientPairs_geneclust10.xlsx", row.names = TRUE)
+WriteXLS("roworder", ExcelFileName = "Heatmap_GSVA_EnTrResiduals_correlation_PatientPairs_roworder.xlsx", row.names = TRUE)
+
+
+```
+
